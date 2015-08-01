@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "description": "Personalized info over SMS",
   "main": "app.js",
-  "dependencies": {
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5"
   },
-  "devDependencies": {},
   "scripts": {
     "test": ""
   },
