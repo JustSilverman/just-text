@@ -4,6 +4,8 @@ pids
 *.pid
 *.seed
 .grunt
+test-results/
+tmp/
 .lock-wscript
 build/Release
-node_modules
+node_modules/

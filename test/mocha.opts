@@ -1,0 +1,4 @@
+setup.js
+src/**/*.js
+-R dot
+-u bdd
