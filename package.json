@@ -1,0 +1,14 @@
+{
+  "name": "just-text",
+  "version": "0.0.1",
+  "description": "Personalized info over SMS",
+  "main": "app.js",
+  "dependencies": {
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": ""
+  },
+  "author": "justin.silverman@gmail.com",
+  "license": "MIT"
+}
