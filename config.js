@@ -1,8 +1,6 @@
 var config = {
   production: {
     url: '',
-    database: {
-    },
     server: {
       host: '',
       port: ''
@@ -11,8 +9,6 @@ var config = {
 
   development: {
     url: '',
-    database: {
-    },
     server: {
       host: '',
       port: ''
@@ -21,8 +17,6 @@ var config = {
 
   test: {
     url: '',
-    database: {
-    },
     server: {
       host: '',
       port: ''
