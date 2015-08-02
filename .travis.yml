@@ -4,6 +4,7 @@ node_js:
   - "iojs"
   - "0.10"
   - "0.12"
+before_install: npm install -g grunt-cli
 notifications:
   email:
     on_success: change
