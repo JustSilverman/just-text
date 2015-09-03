@@ -16,7 +16,7 @@ module.exports = function(grunt) {
 
     run: {
       testDb: {
-        exec: 'dropdb ' + dbName + ' --if-exists && createdb ' + dbName + ' && sequelize db:migrate'
+        exec: 'dropdb ' + dbName + ' --if-exists && createdb ' + dbName
       }
     },
 
