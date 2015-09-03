@@ -2,17 +2,10 @@
 
 var fs        = require('fs');
 var path      = require('path');
-var Sequelize = require('sequelize');
+var assign    = require('object.assign');
 var basename  = path.basename(module.filename);
-var env       = require('../config/settings').environment;
-var config    = require(__dirname + '/../config/config.json')[env];
-var db        = {};
-
-if (config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[config.use_env_variable]);
-} else {
-  var sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+var db        = require('../config/db');
+var Models    = {};
 
 fs
   .readdirSync(__dirname)
@@ -21,17 +14,16 @@ fs
   })
   .forEach(function(file) {
     if (file.slice(-3) !== '.js') return;
-    var model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
+    var model = db.sequelize['import'](path.join(__dirname, file));
+    Models[model.name] = model;
   });
 
-Object.keys(db).forEach(function(modelName) {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
+Object.keys(Models).forEach(function(modelName) {
+  if (Models[modelName].associate) {
+    Models[modelName].associate(Models);
   }
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+assign(Models, db);
 
-module.exports = db;
+module.exports = Models;
