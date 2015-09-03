@@ -1,5 +1,16 @@
 module.exports = function(grunt) {
   grunt.initConfig({
+    env: {
+      dev: {
+        NODE_ENV: process.env.NODE_ENV
+      },
+      test: {
+        NODE_ENV: process.env.NODE_ENV
+      },
+      prod: {
+        NODE_ENV: process.env.NODE_ENV
+      }
+    },
     mochaTest: {
       test: {
         options: {
@@ -14,5 +25,5 @@ module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
   grunt.registerTask('default', []);
-  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('test', ['env:test', 'run:testDb', 'mochaTest']);
 };
