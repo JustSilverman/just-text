@@ -1,3 +1,5 @@
+var dbName = require('./config/settings').dbName;
+
 module.exports = function(grunt) {
   grunt.initConfig({
     env: {
@@ -11,6 +13,13 @@ module.exports = function(grunt) {
         NODE_ENV: process.env.NODE_ENV
       }
     },
+
+    run: {
+      testDb: {
+        exec: 'dropdb ' + dbName + ' --if-exists && createdb ' + dbName + ' && sequelize db:migrate'
+      }
+    },
+
     mochaTest: {
       test: {
         options: {
