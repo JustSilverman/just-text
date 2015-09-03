@@ -1,0 +1,19 @@
+{
+  "development": {
+    "database": "just_text",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "database": "just_text_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "just_text",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
