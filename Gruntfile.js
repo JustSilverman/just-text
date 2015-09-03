@@ -23,11 +23,10 @@ module.exports = function(grunt) {
     mochaTest: {
       test: {
         options: {
-          require: ['test/setup.js'],
           reporter: 'spec',
           colors: true
         },
-        src: ['test/**/*.js']
+        src: ['test/setup.js', 'test/**/*.js']
       }
     }
   });
