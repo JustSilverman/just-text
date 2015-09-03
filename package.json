@@ -4,10 +4,10 @@
   "description": "Personalized info over SMS",
   "main": "app.js",
   "dependencies": {
-    "bookshelf": "^0.8.1",
-    "knex": "^0.8.6",
-    "moment": "^2.10.6",
-    "pg": "^4.4.1"
+    "pg": "^4.4.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.6.0",
+    "sequelize-cli": "^1.9.0"
   },
   "devDependencies": {
     "chai": "^3.2.0",
