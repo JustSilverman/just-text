@@ -15,8 +15,11 @@ module.exports = function(grunt) {
     },
 
     run: {
-      testDb: {
+      resetDb: {
         exec: 'dropdb ' + dbName + ' --if-exists && createdb ' + dbName
+      },
+      migrate: {
+        exec: 'sequelize db:migrate'
       }
     },
 
@@ -33,5 +36,6 @@ module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
   grunt.registerTask('default', []);
-  grunt.registerTask('test', ['env:test', 'run:testDb', 'mochaTest']);
+  grunt.registerTask('reset-db', ['run:resetDb', 'run:migrate']);
+  grunt.registerTask('test', ['env:test', 'reset-db', 'mochaTest']);
 };
