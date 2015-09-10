@@ -1,11 +1,14 @@
 'use strict';
 
-var Schema = require('../schemas/users');
+var schemaFetcher = require('../schemas/schema_fetcher');
 var rotary = require('../helpers/rotary');
+var CURRENT_VERSION = '001';
 
 module.exports = function(sequelize, DataTypes) {
-  var User = sequelize.define(Schema.name, Schema.definition(DataTypes), {
-    tableName: Schema.tableName,
+  var userSchema = schemaFetcher.fetch('users', CURRENT_VERSION);
+
+  return sequelize.define(userSchema.name, userSchema.definition(DataTypes), {
+    tableName: userSchema.tableName,
     hooks: {
       beforeValidate: function(user, options) {
         user.phoneNumber = rotary.parse(user.phoneNumber);
@@ -21,6 +24,4 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-
-  return User;
 };
