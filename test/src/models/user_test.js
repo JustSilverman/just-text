@@ -12,10 +12,11 @@ describe('User', function() {
   beforeEach(function(done) {
     validParams = {
       firstName: 'homestar',
-        lastName: 'runner',
-        email: 'a@b.com',
-        phoneNumber: '4157761212',
-        passwordHash: 'adsfadsf'
+      lastName: 'runner',
+      email: 'a@b.com',
+      phoneNumber: '4157761212',
+      passwordHash: 'adsfadsf',
+      passwordSalt: 'salted-adsfadsf'
     }
 
     User.truncate().then(function() {
