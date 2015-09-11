@@ -2,7 +2,7 @@
 
 var schemaFetcher = require('../schemas/schema_fetcher');
 var rotary = require('../helpers/rotary');
-var CURRENT_VERSION = '002';
+var CURRENT_VERSION = '001';
 
 module.exports = function(sequelize, DataTypes) {
   var userSchema = schemaFetcher.fetch('users', CURRENT_VERSION);

@@ -13,8 +13,7 @@ describe('User', function() {
         lastName: 'runner',
         email: 'a@b.com',
         phoneNumber: '4157761212',
-        passwordHash: 'adsfadsf',
-        passwordSalt: 'salted-adsfadsf'
+        passwordHash: 'adsfadsf'
     }
 
     User.truncate().then(function() {
@@ -31,7 +30,6 @@ describe('User', function() {
           assert.strictEqual('a@b.com', model.email);
           assert.strictEqual('4157761212', model.phoneNumber);
           assert.strictEqual('adsfadsf', model.passwordHash);
-          assert.strictEqual('salted-adsfadsf', model.passwordSalt);
           assert.isDefined(model.get('id'));
           assert.isDefined(model.get('createdAt'));
           assert.isDefined(model.get('updatedAt'));
