@@ -38,6 +38,16 @@ describe('User', function() {
           assert.isDefined(model.get('updatedAt'));
         });
     });
+
+    it('should downcase email', function() {
+      var params = assign(validParams, {
+        email: 'AbCd@b.com'
+      });
+      return User.create(params)
+        .then(function(model) {
+          assert.strictEqual('abcd@b.com', model.email);
+        });
+    });
   });
 
   describe('beforeValidation', function() {
