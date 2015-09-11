@@ -7,7 +7,7 @@ var sinon  = require('sinon');
 describe('User', function() {
   var validParams;
 
-  beforeEach(function() {
+  beforeEach(function(done) {
     validParams = {
       firstName: 'homestar',
         lastName: 'runner',
@@ -17,7 +17,9 @@ describe('User', function() {
         passwordSalt: 'salted-adsfadsf'
     }
 
-    User.truncate();
+    User.truncate().then(function() {
+      done();
+    });
   });
 
   describe('#create', function() {

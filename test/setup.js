@@ -22,7 +22,4 @@ var db = require('../config/db');
 
 before(function(done) {
   sinon.restore();
-  db.sequelize.sync().then(function() {
-    done();
-  });
 });
