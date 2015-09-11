@@ -20,9 +20,6 @@ global.noop = require('../helpers/noop');
 
 var db = require('../config/db');
 
-before(function(done) {
+before(function() {
   sinon.restore();
-  db.sequelize.sync().then(function() {
-    done();
-  });
 });

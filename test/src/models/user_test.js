@@ -7,16 +7,19 @@ var sinon  = require('sinon');
 describe('User', function() {
   var validParams;
 
-  beforeEach(function() {
+  beforeEach(function(done) {
     validParams = {
       firstName: 'homestar',
         lastName: 'runner',
         email: 'a@b.com',
         phoneNumber: '4157761212',
-        passwordHash: 'adsfadsf'
+        passwordHash: 'adsfadsf',
+        passwordSalt: 'salted-adsfadsf'
     }
 
-    User.truncate();
+    User.truncate().then(function() {
+      done();
+    });
   });
 
   describe('#create', function() {
@@ -28,6 +31,7 @@ describe('User', function() {
           assert.strictEqual('a@b.com', model.email);
           assert.strictEqual('4157761212', model.phoneNumber);
           assert.strictEqual('adsfadsf', model.passwordHash);
+          assert.strictEqual('salted-adsfadsf', model.passwordSalt);
           assert.isDefined(model.get('id'));
           assert.isDefined(model.get('createdAt'));
           assert.isDefined(model.get('updatedAt'));
@@ -96,11 +100,14 @@ describe('User', function() {
 
   describe('validating email and phone numbers', function() {
     var userId;
-    beforeEach(function() {
-      return User.create(validParams)
+    beforeEach(function(done) {
+      User.create(validParams)
         .then(function(model) {
           userId = model.id;
-        });
+        })
+        .then(function() {
+          done();
+        })
     });
 
     describe('#validateEmail', function() {

@@ -24,7 +24,7 @@
   },
   "scripts": {
     "test": "NODE_ENV=test grunt test",
-    "reset-db": "NODE_ENV=test grunt reset-db"
+    "reset-db": "grunt reset-db"
   },
   "author": "justin.silverman@gmail.com",
   "private": true,
