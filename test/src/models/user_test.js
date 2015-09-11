@@ -98,11 +98,14 @@ describe('User', function() {
 
   describe('validating email and phone numbers', function() {
     var userId;
-    beforeEach(function() {
-      return User.create(validParams)
+    beforeEach(function(done) {
+      User.create(validParams)
         .then(function(model) {
           userId = model.id;
-        });
+        })
+        .then(function() {
+          done();
+        })
     });
 
     describe('#validateEmail', function() {
