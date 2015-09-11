@@ -12,7 +12,7 @@ module.exports = function(sequelize, DataTypes) {
   return sequelize.define(userSchema.name, userSchema.definition(DataTypes), {
     tableName: userSchema.tableName,
     hooks: {
-      beforeValidate: function(user, options) {
+      beforeValidate: function(user) {
         user.phoneNumber = rotary.parse(user.phoneNumber);
       }
     },
