@@ -3,15 +3,7 @@ var dbName = require('./config/settings').dbName;
 module.exports = function(grunt) {
   grunt.initConfig({
     env: {
-      dev: {
-        NODE_ENV: process.env.NODE_ENV
-      },
-      test: {
-        NODE_ENV: process.env.NODE_ENV
-      },
-      prod: {
-        NODE_ENV: process.env.NODE_ENV
-      }
+      NODE_ENV: process.env.NODE_ENV
     },
 
     run: {
@@ -20,6 +12,9 @@ module.exports = function(grunt) {
       },
       migrate: {
         exec: 'sequelize db:migrate'
+      },
+      server: {
+        exec: 'node app.js'
       }
     },
 
@@ -36,6 +31,7 @@ module.exports = function(grunt) {
 
   require('load-grunt-tasks')(grunt);
   grunt.registerTask('default', []);
+  grunt.registerTask('server', ['env', 'run:server']);
   grunt.registerTask('reset-db', ['run:resetDb', 'run:migrate']);
-  grunt.registerTask('test', ['env:test', 'reset-db', 'mochaTest']);
+  grunt.registerTask('test', ['env', 'reset-db', 'mochaTest']);
 };
