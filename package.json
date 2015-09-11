@@ -29,7 +29,7 @@
     "sinon-as-promised": "^4.0.0"
   },
   "scripts": {
-    "preinstall": "npm i -g node-gyp && node-gyp clean",
+    "preinstall": "~/.node-gyp",
     "start": "NODE_ENV=production grunt server",
     "dev-server": "NODE_ENV=development grunt server",
     "test": "NODE_ENV=test grunt test",
