@@ -1,5 +1,5 @@
 var assign = require('object.assign');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var User   = require('../../../models').User;
 var db     = require('../../../config/db');
 var rotary = require('../../../helpers/rotary');
