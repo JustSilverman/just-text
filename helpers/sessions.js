@@ -7,6 +7,15 @@ var sessions = {
     } else {
       next();
     }
+  },
+
+  loginUser: function(user, req, res) {
+    req.session.reset();
+
+    user.passwordHash = undefined;
+    req.user = user;
+    req.session.user = user;
+    res.locals.user = user;
   }
 }
 

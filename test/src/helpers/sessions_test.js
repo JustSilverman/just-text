@@ -1,5 +1,6 @@
 var sinon = require('sinon');
 var sessions = require('../../../helpers/sessions');
+var User  = require('../../../models').User;
 
 describe('sessions helper', function() {
   describe('#requireLogin', function() {
@@ -25,6 +26,26 @@ describe('sessions helper', function() {
       var next = sinon.stub();
       sessions.requireLogin(req, res, next);
       assert.calledOnce(next);
+    });
+  });
+
+  describe('#loginUser', function() {
+    it('should set the user (without passwordHash) on the req and res', function() {
+      var user = User.build({ id: 12, passwordHash: 'abc123' });
+      mockSession = {
+        reset: sinon.stub()
+      };
+      request = {
+        session: mockSession
+      };
+      response = {
+        locals: {}
+      };
+      sessions.loginUser(user, request, response);
+      assert.strictEqual(user, request.session.user);
+      assert.strictEqual(user, response.locals.user);
+      assert.isUndefined(user.passwordHash);
+      assert.calledOnce(mockSession.reset);
     });
   });
 });
