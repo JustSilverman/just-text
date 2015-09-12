@@ -20,6 +20,13 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     instanceMethods: {
+      toJSON: function () {
+        var values = this.get();
+
+        delete values.passwordHash;
+        return values;
+      },
+
       validateEmail: function() {
         return this.updateAttributes({emailValidated: true});
       },

@@ -16,7 +16,6 @@ describe('User', function() {
       email: 'a@b.com',
       phoneNumber: '4157761212',
       passwordHash: 'adsfadsf',
-      passwordSalt: 'salted-adsfadsf'
     }
 
     User.truncate().then(function() {
@@ -151,6 +150,21 @@ describe('User', function() {
             assert.isTrue(user.phoneNumberValidated);
           });
       });
+    });
+  });
+
+  describe('#toJSON', function() {
+    it('should strip out the passwordHash', function() {
+      return User.create(validParams)
+        .then(function(user) {
+          var json = user.toJSON();
+          var values = user.get();
+
+          assert.isUndefined(json.passwordHash);
+          Object.keys(json).forEach(function(key) {
+            assert.strictEqual(values[key], json[key]);
+          });
+        });
     });
   });
 
