@@ -14,9 +14,19 @@ module.exports = function(sequelize, DataTypes) {
     hooks: {
       beforeValidate: function(user) {
         user.phoneNumber = rotary.parse(user.phoneNumber);
+      },
+      afterValidate: function(user) {
+        user.email = user.email.toLowerCase();
       }
     },
     instanceMethods: {
+      toJSON: function () {
+        var values = this.get();
+
+        delete values.passwordHash;
+        return values;
+      },
+
       validateEmail: function() {
         return this.updateAttributes({emailValidated: true});
       },

@@ -12,10 +12,10 @@ describe('User', function() {
   beforeEach(function(done) {
     validParams = {
       firstName: 'homestar',
-        lastName: 'runner',
-        email: 'a@b.com',
-        phoneNumber: '4157761212',
-        passwordHash: 'adsfadsf'
+      lastName: 'runner',
+      email: 'a@b.com',
+      phoneNumber: '4157761212',
+      passwordHash: 'adsfadsf',
     }
 
     User.truncate().then(function() {
@@ -35,6 +35,16 @@ describe('User', function() {
           assert.isDefined(model.get('id'));
           assert.isDefined(model.get('createdAt'));
           assert.isDefined(model.get('updatedAt'));
+        });
+    });
+
+    it('should downcase email', function() {
+      var params = assign(validParams, {
+        email: 'AbCd@b.com'
+      });
+      return User.create(params)
+        .then(function(model) {
+          assert.strictEqual('abcd@b.com', model.email);
         });
     });
   });
@@ -140,6 +150,21 @@ describe('User', function() {
             assert.isTrue(user.phoneNumberValidated);
           });
       });
+    });
+  });
+
+  describe('#toJSON', function() {
+    it('should strip out the passwordHash', function() {
+      return User.create(validParams)
+        .then(function(user) {
+          var json = user.toJSON();
+          var values = user.get();
+
+          assert.isUndefined(json.passwordHash);
+          Object.keys(json).forEach(function(key) {
+            assert.strictEqual(values[key], json[key]);
+          });
+        });
     });
   });
 
