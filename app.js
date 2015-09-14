@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 
 var settings = require('./config/settings');
-var session = require('./middleware/session');
+var sessions = require('client-sessions');
 var sessionUpdater = require('./middleware/session_updater');
 
 var app = express();
@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(serveStatic(__dirname + '/public'));
-app.use(session);
+app.use(sessions(settings.session));
 app.use(sessionUpdater);
 
 app.listen(settings.port, function() {
