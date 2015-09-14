@@ -11,6 +11,7 @@ var exphbs  = require('express-handlebars');
 var settings = require('./config/settings');
 var sessions = require('client-sessions');
 var sessionUpdater = require('./middleware/session_updater');
+var router = require('./config/router');
 
 var app = express();
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 app.use(serveStatic(__dirname + '/public'));
 app.use(sessions(settings.session));
 app.use(sessionUpdater);
+app.use(router);
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
