@@ -67,6 +67,13 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false
       },
+
+      password: {
+        type: DataTypes.VIRTUAL,
+        set: function (val) {
+          this.setDataValue('password', val);
+        }
+      }
     }
   }
 };
