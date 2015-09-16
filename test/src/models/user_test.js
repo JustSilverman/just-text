@@ -42,6 +42,7 @@ describe('User', function() {
           assert.strictEqual('a@b.com', model.email);
           assert.strictEqual('4157761212', model.phoneNumber);
           assert.strictEqual(hashed, model.passwordHash);
+          assert.isUndefined(model.password);
           assert.isDefined(model.get('id'));
           assert.isDefined(model.get('createdAt'));
           assert.isDefined(model.get('updatedAt'));

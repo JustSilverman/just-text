@@ -50,6 +50,7 @@ module.exports = function(sequelize, DataTypes) {
 
     return User.hashPassword(user.password).then(function(hashedPassword) {
       user.passwordHash = hashedPassword;
+      user.password = undefined;
     });
   });
 
