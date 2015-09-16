@@ -18,7 +18,7 @@ chai.assert.equal = function() {
 global.assert = chai.assert;
 global.noop = require('../helpers/noop');
 
-var db = require('../config/db');
+var db = require('config/db');
 
 before(function() {
   sinon.restore();

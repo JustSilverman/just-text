@@ -1,8 +1,8 @@
 var sinon = require('sinon');
 var httpMocks = require('node-mocks-http');
-var controller = require('../../../controllers/sessions');
-var User  = require('../../../models').User;
-var sessions = require('../../../helpers/sessions');
+var controller = require('controllers/sessions');
+var User  = require('models').User;
+var sessions = require('helpers/sessions');
 
 describe('sessions controller', function() {
   var req;

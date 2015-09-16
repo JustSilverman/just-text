@@ -1,5 +1,5 @@
 var sequelize = require('sequelize');
-var helper = require('../../../helpers/schema');
+var helper = require('helpers/schema');
 
 describe('schema helper', function() {
   var id = {

@@ -1,4 +1,4 @@
-var rotary = require('../../../helpers/rotary');
+var rotary = require('helpers/rotary');
 
 describe('Rotary', function() {
   it('should parse non-numeric characters', function() {

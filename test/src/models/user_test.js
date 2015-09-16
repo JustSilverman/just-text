@@ -1,9 +1,9 @@
 var assign = require('object.assign');
 var bcrypt = require('bcrypt-as-promised');
-var User   = require('../../../models').User;
-var db     = require('../../../config/db');
-var rotary = require('../../../helpers/rotary');
-var noop   = require('../../../helpers/noop');
+var User   = require('models').User;
+var db     = require('config/db');
+var rotary = require('helpers/rotary');
+var noop   = require('helpers/noop');
 var sinon  = require('sinon');
 
 describe('User', function() {

@@ -1,4 +1,4 @@
-var helper = require('../../../helpers/controller');
+var helper = require('helpers/controller');
 
 describe('controller helper', function() {
   describe('#toErrorMap', function() {
