@@ -176,6 +176,41 @@ describe('User', function() {
     });
   });
 
+  describe('.authenticate', function() {
+    var userId;
+    var email;
+    var password = 'updownupdownabselectstart'
+
+    beforeEach(function(done) {
+      validParams.password = password;
+      User.create(validParams)
+        .then(function(model) {
+          userId = model.id;
+          email = model.email;
+          done();
+        });
+    });
+
+    it('should authenticate a user', function() {
+      return User.authenticate(email, password).then(function(user) {
+        assert.strictEqual(userId, user.id);
+        assert.strictEqual(email, user.email);
+      });
+    });
+
+    it('should fail authentication with an incorrect password', function() {
+      return User.authenticate(email, password + '123').catch(function(error) {
+        assert.strictEqual('invalid', error.message);
+      });
+    });
+
+    it('should fail authentication with unknown email', function() {
+      return User.authenticate(email + '1', password).catch(function(error) {
+        assert.strictEqual('invalid', error.message);
+      });
+    });
+  });
+
   describe('.hashPassword', function() {
     var password = 'password';
     var bcryptHashStub;
