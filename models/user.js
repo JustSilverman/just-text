@@ -9,16 +9,8 @@ var DEFAULT_SALT_FACTOR = 10;
 module.exports = function(sequelize, DataTypes) {
   var userSchema = schemaFetcher.fetch('users', CURRENT_VERSION);
 
-  return sequelize.define(userSchema.name, userSchema.definition(DataTypes), {
+  var User = sequelize.define(userSchema.name, userSchema.definition(DataTypes), {
     tableName: userSchema.tableName,
-    hooks: {
-      beforeValidate: function(user) {
-        user.phoneNumber = rotary.parse(user.phoneNumber);
-      },
-      afterValidate: function(user) {
-        user.email = user.email.toLowerCase();
-      }
-    },
     instanceMethods: {
       toJSON: function () {
         var values = this.get();
@@ -45,4 +37,14 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
+
+  User.addHook('beforeValidate', function(user) {
+    user.phoneNumber = rotary.parse(user.phoneNumber);
+  });
+
+
+  User.addHook('afterValidate', function(user) {
+    user.email = user.email.toLowerCase();
+  });
+
 };
