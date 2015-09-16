@@ -16,7 +16,7 @@ chai.assert.equal = function() {
 }
 
 global.assert = chai.assert;
-global.noop = require('../helpers/noop');
+global.noop = require('helpers/noop');
 
 var db = require('config/db');
 
