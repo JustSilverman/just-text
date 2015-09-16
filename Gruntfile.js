@@ -1,6 +1,8 @@
-var dbName = require('./config/settings').dbName;
 
 module.exports = function(grunt) {
+  require('app-module-path').addPath(__dirname);
+  var dbName = require('config/settings').dbName;
+
   grunt.initConfig({
     env: {
       NODE_ENV: process.env.NODE_ENV

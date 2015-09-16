@@ -7,7 +7,6 @@ var errorhandler = require('errorhandler');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var exphbs  = require('express-handlebars');
-require('app-module-path').addPath(__dirname);
 
 var settings = require('./config/settings');
 var sessions = require('client-sessions');
