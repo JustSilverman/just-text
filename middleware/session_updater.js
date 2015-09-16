@@ -24,7 +24,7 @@ function sessionUpdater(req, res, next) {
       req.session.user = user;
       res.locals.user = user;
 
-      next();
+      return next();
     });
 };
 

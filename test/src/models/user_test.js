@@ -42,6 +42,7 @@ describe('User', function() {
           assert.strictEqual('a@b.com', model.email);
           assert.strictEqual('4157761212', model.phoneNumber);
           assert.strictEqual(hashed, model.passwordHash);
+          assert.isUndefined(model.password);
           assert.isDefined(model.get('id'));
           assert.isDefined(model.get('createdAt'));
           assert.isDefined(model.get('updatedAt'));
@@ -172,6 +173,41 @@ describe('User', function() {
             assert.strictEqual(values[key], json[key]);
           });
         });
+    });
+  });
+
+  describe('.authenticate', function() {
+    var userId;
+    var email;
+    var password = 'updownupdownabselectstart'
+
+    beforeEach(function(done) {
+      validParams.password = password;
+      User.create(validParams)
+        .then(function(model) {
+          userId = model.id;
+          email = model.email;
+          done();
+        });
+    });
+
+    it('should authenticate a user', function() {
+      return User.authenticate(email, password).then(function(user) {
+        assert.strictEqual(userId, user.id);
+        assert.strictEqual(email, user.email);
+      });
+    });
+
+    it('should fail authentication with an incorrect password', function() {
+      return User.authenticate(email, password + '123').catch(function(error) {
+        assert.strictEqual('invalid', error.message);
+      });
+    });
+
+    it('should fail authentication with unknown email', function() {
+      return User.authenticate(email + '1', password).catch(function(error) {
+        assert.strictEqual('invalid', error.message);
+      });
     });
   });
 

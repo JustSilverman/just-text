@@ -28,6 +28,24 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
+      authenticate: function(email, passwordAttempt) {
+        return User.findOne({ email: email })
+          .then(function(user) {
+            if (!user) {
+              return sequelize.Promise.reject(new Error('invalid'));
+            }
+
+            return bcrypt.compare(passwordAttempt, user.passwordHash)
+              .then(function(valid) {
+                if (!valid) {
+                  return sequelize.Promise.reject(new Error('invalid'));
+                }
+
+                return sequelize.Promise.resolve(user);
+              });
+          });
+
+      },
       hashPassword: function(password) {
         if (!password) {
           return sequelize.Promise.reject(new Error('Invalid password of ' + password + ' passed to hashPassword.'));
@@ -39,7 +57,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.addHook('beforeValidate', function(user) {
-    user.phoneNumber = rotary.parse(user.phoneNumber);
+    var phoneNumber = user.phoneNumber || '';
+    user.phoneNumber = rotary.parse(phoneNumber);
   });
 
   User.addHook('beforeValidate', function(user) {
@@ -49,6 +68,7 @@ module.exports = function(sequelize, DataTypes) {
 
     return User.hashPassword(user.password).then(function(hashedPassword) {
       user.passwordHash = hashedPassword;
+      user.password = undefined;
     });
   });
 
