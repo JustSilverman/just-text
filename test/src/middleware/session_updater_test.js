@@ -58,7 +58,7 @@ describe('sessionUpdater', function() {
     assert.calledOnce(mockSession.destroy);
   });
 
-  it('should not update the session if the user is not found', function() {
+  it('should not update the session if the user is not found', function(done) {
     var user = User.build({ id: 12 });
     mockSession.user = user;
     request = {
@@ -66,9 +66,9 @@ describe('sessionUpdater', function() {
     };
     findByIdStub.withArgs(12).resolves(null);
     sessionUpdater(request, response, function() {
-      assert.isUndefined(request.session.user);
-      assert.strictEqual({}, request.response.locals);
+      assert.deepEqual({}, response.locals);
       assert.calledOnce(mockSession.destroy);
+      done()
     });
   });
 });
