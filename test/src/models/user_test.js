@@ -15,7 +15,7 @@ describe('User', function() {
       lastName: 'runner',
       email: 'a@b.com',
       phoneNumber: '4157761212',
-      passwordHash: 'adsfadsf',
+      password: 'adsfadsf',
     }
 
     User.truncate().then(function() {
@@ -24,6 +24,16 @@ describe('User', function() {
   });
 
   describe('#create', function() {
+    var hashed = 'abc123';
+
+    beforeEach(function() {
+      hashStub = sinon.stub(User, 'hashPassword').resolves(hashed);
+    });
+
+    afterEach(function() {
+      User.hashPassword.restore();
+    });
+
     it('should create a user', function() {
       return User.create(validParams)
         .then(function(model) {
@@ -31,7 +41,7 @@ describe('User', function() {
           assert.strictEqual('runner', model.lastName);
           assert.strictEqual('a@b.com', model.email);
           assert.strictEqual('4157761212', model.phoneNumber);
-          assert.strictEqual('adsfadsf', model.passwordHash);
+          assert.strictEqual(hashed, model.passwordHash);
           assert.isDefined(model.get('id'));
           assert.isDefined(model.get('createdAt'));
           assert.isDefined(model.get('updatedAt'));
@@ -73,9 +83,8 @@ describe('User', function() {
       });
 
       return User
-        .build(params)
-        .validate()
-        .then(function(validationError) {
+        .create(params)
+        .catch(function(validationError) {
           assert.strictEqual('email', validationError.errors[0].path);
           assert.strictEqual('Email address must be valid', validationError.errors[0].message);
         })
@@ -85,9 +94,8 @@ describe('User', function() {
       delete validParams.phoneNumber;
 
       return User
-        .build(validParams)
-        .validate()
-        .then(function(validationError) {
+        .create(validParams)
+        .catch(function(validationError) {
           assert.strictEqual('phoneNumber', validationError.errors[0].path);
           assert.strictEqual('Phone number must be 10 digits', validationError.errors[0].message);
         })
@@ -99,9 +107,8 @@ describe('User', function() {
       });
 
       return User
-        .build(params)
-        .validate()
-        .then(function(validationError) {
+        .create(params)
+        .catch(function(validationError) {
           assert.strictEqual('phoneNumber', validationError.errors[0].path);
           assert.strictEqual('Phone number must be 10 digits', validationError.errors[0].message);
         })
@@ -170,19 +177,19 @@ describe('User', function() {
 
   describe('.hashPassword', function() {
     var password = 'password';
-    var hashStub;
+    var bcryptHashStub;
     var error = new Error();
 
     beforeEach(function() {
-      hashStub = sinon.stub(bcrypt, 'hash');
+      bcryptHashStub = sinon.stub(bcrypt, 'hash');
     });
 
     afterEach(function() {
-      hashStub.restore();
+      bcryptHashStub.restore();
     });
 
     it('should generate a salt and hash the password', function() {
-      hashStub.resolves('def79');
+      bcryptHashStub.resolves('def79');
 
       return User.hashPassword(password).then(function(hash) {
         assert.strictEqual('def79', hash);
@@ -208,7 +215,7 @@ describe('User', function() {
     });
 
     it('should raise if hashing fails', function() {
-      hashStub.rejects(error);
+      bcryptHashStub.rejects(error);
 
       return User.hashPassword(password).catch(function(err) {
         assert.strictEqual(error, err);

@@ -42,9 +42,19 @@ module.exports = function(sequelize, DataTypes) {
     user.phoneNumber = rotary.parse(user.phoneNumber);
   });
 
+  User.addHook('beforeValidate', function(user) {
+    if (user.passwordHash) {
+      return sequelize.Promise.resolve();
+    }
+
+    return User.hashPassword(user.password).then(function(hashedPassword) {
+      user.passwordHash = hashedPassword;
+    });
+  });
 
   User.addHook('afterValidate', function(user) {
     user.email = user.email.toLowerCase();
   });
 
+  return User;
 };
