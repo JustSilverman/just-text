@@ -1,6 +1,6 @@
 var assign = require('object.assign');
 var httpMocks = require('node-mocks-http');
-var sinon = require('sinon');
+var sinon = require('sinon-sandbox');
 var controller = require('controllers/users');
 var sessions = require('helpers/sessions');
 var User  = require('models').User;
@@ -18,7 +18,6 @@ describe('users controller', function() {
   });
 
   afterEach(function(done) {
-    res.render.restore();
     User.truncate().then(function() {
       done();
     });
@@ -48,10 +47,6 @@ describe('users controller', function() {
 
     beforeEach(function() {
       loginStub = sinon.stub(sessions, 'loginUser');
-    });
-
-    afterEach(function() {
-      sessions.loginUser.restore();
     });
 
     it('should create the user and redirect to the users route', function() {

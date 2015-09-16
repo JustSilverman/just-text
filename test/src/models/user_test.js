@@ -4,7 +4,7 @@ var User   = require('models').User;
 var db     = require('config/db');
 var rotary = require('helpers/rotary');
 var noop   = require('helpers/noop');
-var sinon  = require('sinon');
+var sinon  = require('sinon-sandbox');
 
 describe('User', function() {
   var validParams;
@@ -28,10 +28,6 @@ describe('User', function() {
 
     beforeEach(function() {
       hashStub = sinon.stub(User, 'hashPassword').resolves(hashed);
-    });
-
-    afterEach(function() {
-      User.hashPassword.restore();
     });
 
     it('should create a user', function() {
@@ -218,10 +214,6 @@ describe('User', function() {
 
     beforeEach(function() {
       bcryptHashStub = sinon.stub(bcrypt, 'hash');
-    });
-
-    afterEach(function() {
-      bcryptHashStub.restore();
     });
 
     it('should generate a salt and hash the password', function() {
