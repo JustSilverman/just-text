@@ -1,5 +1,5 @@
 var assign = require('object.assign');
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt-as-promised');
 var User   = require('../../../models').User;
 var db     = require('../../../config/db');
 var rotary = require('../../../helpers/rotary');
@@ -15,7 +15,7 @@ describe('User', function() {
       lastName: 'runner',
       email: 'a@b.com',
       phoneNumber: '4157761212',
-      passwordHash: 'adsfadsf',
+      password: 'adsfadsf',
     }
 
     User.truncate().then(function() {
@@ -24,6 +24,16 @@ describe('User', function() {
   });
 
   describe('#create', function() {
+    var hashed = 'abc123';
+
+    beforeEach(function() {
+      hashStub = sinon.stub(User, 'hashPassword').resolves(hashed);
+    });
+
+    afterEach(function() {
+      User.hashPassword.restore();
+    });
+
     it('should create a user', function() {
       return User.create(validParams)
         .then(function(model) {
@@ -31,7 +41,7 @@ describe('User', function() {
           assert.strictEqual('runner', model.lastName);
           assert.strictEqual('a@b.com', model.email);
           assert.strictEqual('4157761212', model.phoneNumber);
-          assert.strictEqual('adsfadsf', model.passwordHash);
+          assert.strictEqual(hashed, model.passwordHash);
           assert.isDefined(model.get('id'));
           assert.isDefined(model.get('createdAt'));
           assert.isDefined(model.get('updatedAt'));
@@ -73,9 +83,8 @@ describe('User', function() {
       });
 
       return User
-        .build(params)
-        .validate()
-        .then(function(validationError) {
+        .create(params)
+        .catch(function(validationError) {
           assert.strictEqual('email', validationError.errors[0].path);
           assert.strictEqual('Email address must be valid', validationError.errors[0].message);
         })
@@ -85,9 +94,8 @@ describe('User', function() {
       delete validParams.phoneNumber;
 
       return User
-        .build(validParams)
-        .validate()
-        .then(function(validationError) {
+        .create(validParams)
+        .catch(function(validationError) {
           assert.strictEqual('phoneNumber', validationError.errors[0].path);
           assert.strictEqual('Phone number must be 10 digits', validationError.errors[0].message);
         })
@@ -99,9 +107,8 @@ describe('User', function() {
       });
 
       return User
-        .build(params)
-        .validate()
-        .then(function(validationError) {
+        .create(params)
+        .catch(function(validationError) {
           assert.strictEqual('phoneNumber', validationError.errors[0].path);
           assert.strictEqual('Phone number must be 10 digits', validationError.errors[0].message);
         })
@@ -170,67 +177,48 @@ describe('User', function() {
 
   describe('.hashPassword', function() {
     var password = 'password';
-    var saltStub;
-    var hashStub;
+    var bcryptHashStub;
     var error = new Error();
 
     beforeEach(function() {
-      saltStub = sinon.stub(bcrypt, 'genSalt');
-      hashStub = sinon.stub(bcrypt, 'hash');
+      bcryptHashStub = sinon.stub(bcrypt, 'hash');
     });
 
     afterEach(function() {
-      saltStub.restore();
-      hashStub.restore();
+      bcryptHashStub.restore();
     });
 
-    it('should generate a salt and hash the password', function(done) {
-      saltStub.withArgs(10).yields(null, 'abc123');
-      hashStub.withArgs(password, 'abc123').yields(null, 'def79');
+    it('should generate a salt and hash the password', function() {
+      bcryptHashStub.resolves('def79');
 
-      User.hashPassword(password, function(err, hash) {
+      return User.hashPassword(password).then(function(hash) {
         assert.strictEqual('def79', hash);
-        done();
       });
     });
 
-    it('should return an error if passed null', function(done) {
-      User.hashPassword(null, function(err, hash) {
+    it('should return an error if passed null', function() {
+      return User.hashPassword(null).catch(function(err) {
         assert.match(err.message, /^Invalid password/);
-        done();
       });
     });
 
-    it('should return an error if passed undefined', function(done) {
-      User.hashPassword(undefined, function(err, hash) {
+    it('should return an error if passed undefined', function() {
+      return User.hashPassword(undefined).catch(function(err) {
         assert.match(err.message, /^Invalid password/);
-        done();
       });
     });
 
-    it('should return an error if passed empty sring', function(done) {
-      User.hashPassword('', function(err, hash) {
+    it('should return an error if passed empty sring', function() {
+      return User.hashPassword('').catch(function(err) {
         assert.match(err.message, /^Invalid password/);
-        done();
       });
     });
 
-    it('should raise if salting fails', function(done) {
-      saltStub.yields(error, null);
+    it('should raise if hashing fails', function() {
+      bcryptHashStub.rejects(error);
 
-      User.hashPassword(password, function(err, hash) {
+      return User.hashPassword(password).catch(function(err) {
         assert.strictEqual(error, err);
-        done();
-      });
-    });
-
-    it('should raise if hashing fails', function(done) {
-      saltStub.yields(null, 'abc123');
-      hashStub.yields(error, null);
-
-      User.hashPassword(password, function(err, hash) {
-        assert.strictEqual(error, err);
-        done();
       });
     });
   });
