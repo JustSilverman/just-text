@@ -1,8 +1,6 @@
 'use strict';
 
 var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
 chai.config.includeStack = true;
 
 var sinon = require('sinon');
@@ -20,6 +18,12 @@ global.noop = require('helpers/noop');
 
 var db = require('config/db');
 
-before(function() {
-  sinon.restore();
+var sinonSandbox = require('sinon-sandbox');
+
+afterEach(function() {
+  if (sinonSandbox.clock) {
+    sinonSandbox.clock.restore();
+  }
+
+  sinonSandbox.restore();
 });
