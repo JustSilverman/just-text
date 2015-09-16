@@ -1,7 +1,7 @@
 'use strict';
 
 var httpMocks = require('node-mocks-http');
-var sinon = require('sinon');
+var sinon = require('sinon-sandbox');
 var controller = require('controllers/application');
 
 describe('application controller', function() {

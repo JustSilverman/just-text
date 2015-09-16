@@ -1,4 +1,4 @@
-var sinon = require('sinon');
+var sinon = require('sinon-sandbox');
 var User  = require('models').User;
 
 describe('sessionUpdater', function() {
@@ -19,10 +19,6 @@ describe('sessionUpdater', function() {
     };
     next = sinon.stub();
     findByIdStub = sinon.stub(User, 'findById');
-  });
-
-  afterEach(function() {
-    User.findById.restore();
   });
 
   it('should set the user (without passwordHash) on the session, request and response', function(done) {

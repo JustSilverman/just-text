@@ -1,4 +1,4 @@
-var sinon = require('sinon');
+var sinon = require('sinon-sandbox');
 var sessions = require('helpers/sessions');
 var User  = require('models').User;
 

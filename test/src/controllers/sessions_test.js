@@ -1,4 +1,4 @@
-var sinon = require('sinon');
+var sinon = require('sinon-sandbox');
 var httpMocks = require('node-mocks-http');
 var controller = require('controllers/sessions');
 var User  = require('models').User;
@@ -59,7 +59,6 @@ describe('sessions controller', function() {
         var userForSession = sessionsStub.getCall(0).args[0];
         assert.strictEqual(userForSession.id, userId);
         assert.calledWith(redirectStub, '/');
-        sessions.loginUser.restore();
       });
     });
 
