@@ -2,11 +2,11 @@
 
 var express = require('express');
 var router = express.Router();
-var sessionsHelper = require('../helpers/sessions');
+var sessionsHelper = require('helpers/sessions');
 
-var applicationController = require('../controllers/application');
-var usersController = require('../controllers/users');
-var sessionsController = require('../controllers/sessions');
+var applicationController = require('controllers/application');
+var usersController = require('controllers/users');
+var sessionsController = require('controllers/sessions');
 
 router.get('/', applicationController.root);
 

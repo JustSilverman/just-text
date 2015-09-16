@@ -2,7 +2,7 @@
 
 var httpMocks = require('node-mocks-http');
 var sinon = require('sinon');
-var controller = require('../../../controllers/application');
+var controller = require('controllers/application');
 
 describe('application controller', function() {
   describe('#root', function() {

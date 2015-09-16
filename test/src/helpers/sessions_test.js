@@ -1,6 +1,6 @@
 var sinon = require('sinon');
-var sessions = require('../../../helpers/sessions');
-var User  = require('../../../models').User;
+var sessions = require('helpers/sessions');
+var User  = require('models').User;
 
 describe('sessions helper', function() {
   describe('#requireLogin', function() {

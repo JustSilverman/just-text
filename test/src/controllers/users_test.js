@@ -1,9 +1,9 @@
 var assign = require('object.assign');
 var httpMocks = require('node-mocks-http');
 var sinon = require('sinon');
-var controller = require('../../../controllers/users');
-var sessions = require('../../../helpers/sessions');
-var User  = require('../../../models').User;
+var controller = require('controllers/users');
+var sessions = require('helpers/sessions');
+var User  = require('models').User;
 
 describe('users controller', function() {
   var req;

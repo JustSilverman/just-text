@@ -1,5 +1,5 @@
 var sinon = require('sinon');
-var User  = require('../../../models').User;
+var User  = require('models').User;
 
 describe('sessionUpdater', function() {
   var sessionUpdater = require('../../../middleware/session_updater');
