@@ -1,6 +1,6 @@
 'use strict';
 
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt-as-promised');
 var schemaFetcher = require('../schemas/schema_fetcher');
 var rotary = require('../helpers/rotary');
 var CURRENT_VERSION = '001';
@@ -36,18 +36,12 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
-      hashPassword: function(password, cb) {
+      hashPassword: function(password) {
         if (!password) {
-          return cb(new Error('Invalid password of ' + password + ' passed to hashPassword.'));
+          return sequelize.Promise.reject(new Error('Invalid password of ' + password + ' passed to hashPassword.'));
         }
 
-        bcrypt.genSalt(DEFAULT_SALT_FACTOR, function(err, salt) {
-          if (err) {
-            return cb(err);
-          }
-
-          bcrypt.hash(password, salt, cb);
-        });
+        return bcrypt.hash(password, DEFAULT_SALT_FACTOR);
       }
     }
   });

@@ -1,5 +1,5 @@
 var assign = require('object.assign');
-var bcrypt = require('bcryptjs');
+var bcrypt = require('bcrypt-as-promised');
 var User   = require('../../../models').User;
 var db     = require('../../../config/db');
 var rotary = require('../../../helpers/rotary');
@@ -170,67 +170,48 @@ describe('User', function() {
 
   describe('.hashPassword', function() {
     var password = 'password';
-    var saltStub;
     var hashStub;
     var error = new Error();
 
     beforeEach(function() {
-      saltStub = sinon.stub(bcrypt, 'genSalt');
       hashStub = sinon.stub(bcrypt, 'hash');
     });
 
     afterEach(function() {
-      saltStub.restore();
       hashStub.restore();
     });
 
-    it('should generate a salt and hash the password', function(done) {
-      saltStub.withArgs(10).yields(null, 'abc123');
-      hashStub.withArgs(password, 'abc123').yields(null, 'def79');
+    it('should generate a salt and hash the password', function() {
+      hashStub.resolves('def79');
 
-      User.hashPassword(password, function(err, hash) {
+      return User.hashPassword(password).then(function(hash) {
         assert.strictEqual('def79', hash);
-        done();
       });
     });
 
-    it('should return an error if passed null', function(done) {
-      User.hashPassword(null, function(err, hash) {
+    it('should return an error if passed null', function() {
+      return User.hashPassword(null).catch(function(err) {
         assert.match(err.message, /^Invalid password/);
-        done();
       });
     });
 
-    it('should return an error if passed undefined', function(done) {
-      User.hashPassword(undefined, function(err, hash) {
+    it('should return an error if passed undefined', function() {
+      return User.hashPassword(undefined).catch(function(err) {
         assert.match(err.message, /^Invalid password/);
-        done();
       });
     });
 
-    it('should return an error if passed empty sring', function(done) {
-      User.hashPassword('', function(err, hash) {
+    it('should return an error if passed empty sring', function() {
+      return User.hashPassword('').catch(function(err) {
         assert.match(err.message, /^Invalid password/);
-        done();
       });
     });
 
-    it('should raise if salting fails', function(done) {
-      saltStub.yields(error, null);
+    it('should raise if hashing fails', function() {
+      hashStub.rejects(error);
 
-      User.hashPassword(password, function(err, hash) {
+      return User.hashPassword(password).catch(function(err) {
         assert.strictEqual(error, err);
-        done();
-      });
-    });
-
-    it('should raise if hashing fails', function(done) {
-      saltStub.yields(null, 'abc123');
-      hashStub.yields(error, null);
-
-      User.hashPassword(password, function(err, hash) {
-        assert.strictEqual(error, err);
-        done();
       });
     });
   });
