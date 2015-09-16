@@ -39,7 +39,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.addHook('beforeValidate', function(user) {
-    user.phoneNumber = rotary.parse(user.phoneNumber);
+    var phoneNumber = user.phoneNumber || '';
+    user.phoneNumber = rotary.parse(phoneNumber);
   });
 
   User.addHook('beforeValidate', function(user) {
