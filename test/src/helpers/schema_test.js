@@ -19,15 +19,26 @@ describe('schema helper', function() {
     allowNull: false,
   };
 
+  var passwordNone = {
+    type: sequelize.NONE,
+    allowNull: false,
+  };
+
   describe('#removeVirtual', function() {
     it('should remove virtual attributes', function() {
+      var schema = {
+        id: id,
+        firstName: firstName,
+        password: password,
+        passwordNone: passwordNone
+      };
 
+      var withoutVirtualAttributes = helper.removeVirtual(schema);
+      assert.deepEqual(['id', 'firstName'], Object.keys(withoutVirtualAttributes));
     });
-
   });
 
   describe('#timestamps', function() {
-
     describe('#addToSchema', function() {
       it('should add the default methods to the schema', function() {
         var schema = {
