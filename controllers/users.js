@@ -10,6 +10,10 @@ var userController = {
   },
 
   getUser: function(req, res) {
+    if (req.params.id !== req.session.user.id) {
+      return res.redirect('/users/' + req.session.user.id);
+    }
+
     res.render('profile', { user: req.session.user });
   },
 
