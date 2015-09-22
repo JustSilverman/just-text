@@ -1,8 +1,8 @@
 'use strict';
 
-var User  = require('models').User;
-var sessions = require('helpers/sessions');
-var toErrorMap = require('helpers/controller').toErrorMap;
+var User  = require('../models').User;
+var sessions = require('../helpers/sessions');
+var toErrorMap = require('../helpers/controller').toErrorMap;
 
 var userController = {
   newUser: function(req, res) {

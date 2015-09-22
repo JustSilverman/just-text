@@ -2,8 +2,8 @@
 
 var express = require('express');
 var router = express.Router();
-var sessions = require('helpers/sessions');
-var User   = require('models').User;
+var sessions = require('../helpers/sessions');
+var User   = require('../models').User;
 
 var sessionsController = {
   loginPage: function(req, res) {
