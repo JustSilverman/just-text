@@ -2,6 +2,10 @@ var helper = require('helpers/controller');
 
 describe('controller helper', function() {
   describe('#toErrorMap', function() {
+    it('should return an empty array if the arg is undefined', function() {
+      assert.deepEqual([], helper.toErrorMap());
+    });
+
     it('should return an empty array if there are no errors', function() {
       assert.deepEqual([], helper.toErrorMap([]));
     });

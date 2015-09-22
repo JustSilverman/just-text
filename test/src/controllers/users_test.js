@@ -33,12 +33,35 @@ describe('users controller', function() {
   describe('#getUser', function() {
     it('should render the template when logged in', function() {
       var user = User.build({ id: 22 });
-      req.session = {
-        user: user
-      }
+      var req = httpMocks.createRequest({
+        session: {
+          user: user
+        },
+
+        params: {
+          id: user.id
+        }
+      });
 
       controller.getUser(req, res);
-      assert.calledWith(renderStub, 'profile');
+      assert.calledWith(renderStub, 'profile', { user: user });
+    });
+
+    it('should redirect if logged in and the user id does not match', function() {
+      var redirectStub = sinon.stub(res, 'redirect');
+      var user = User.build({ id: 22 });
+      var req = httpMocks.createRequest({
+        session: {
+          user: user
+        },
+
+        params: {
+          id: user.id + 1
+        }
+      });
+
+      controller.getUser(req, res);
+      assert.calledWith(redirectStub, '/users/' + 22);
     });
   });
 
@@ -55,7 +78,7 @@ describe('users controller', function() {
         lastName: 'runner',
         email: 'a@b.com',
         phoneNumber: '415 776-1212',
-        password: 'sshhh'
+        password: 'sshhhhh'
       };
       var req = httpMocks.createRequest({ body: body });
       var redirectStub = sinon.stub(res, 'redirect');
@@ -73,7 +96,7 @@ describe('users controller', function() {
       var body = {
         lastName: 'runner',
         email: 'a@b.com',
-        password: 'sshhh'
+        password: 'sshhhhh'
       };
       var req = httpMocks.createRequest({ body: body });
       var redirectStub = sinon.stub(res, 'redirect');
@@ -84,7 +107,7 @@ describe('users controller', function() {
           assert.notCalled(loginStub);
           assert.calledWith(renderStub, 'signup', {
             errors: [
-              { field: 'firstName', message: 'firstName cannot be null' },
+              { field: 'firstName', message: 'First name cannot be blank' },
               { field: 'phoneNumber', message: 'Phone number must be 10 digits' }
             ]
           });

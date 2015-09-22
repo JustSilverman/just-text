@@ -13,20 +13,32 @@ module.exports = {
 
       firstName: {
         field: 'first_name',
+        label: 'first name',
         type: DataTypes.STRING,
-        allowNull: false,
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: 'First name cannot be blank'
+          }
+        }
       },
 
       lastName: {
         field: 'last_name',
+        label: 'last name',
         type: DataTypes.STRING,
-        allowNull: false
+        defaultValue: '',
+        validate: {
+          notEmpty: {
+            msg: 'Last name cannot be blank'
+          }
+        }
       },
 
       email: {
         type: DataTypes.STRING,
+        defaultValue: '',
         unique: true,
-        allowNull: false,
         validate: {
           isEmail: {
             msg: "Email address must be valid"
@@ -43,9 +55,9 @@ module.exports = {
 
       phoneNumber: {
         field: 'phone_number',
+        label: 'phone number',
         type: DataTypes.STRING,
         unique: true,
-        allowNull: false,
         defaultValue: '',
         validate: {
           len: {
@@ -64,14 +76,21 @@ module.exports = {
 
       passwordHash: {
         field: 'password_hash',
-        type: DataTypes.STRING,
-        allowNull: false
+        defaultValue: '',
+        type: DataTypes.STRING
       },
 
       password: {
         type: DataTypes.VIRTUAL,
         set: function (val) {
           this.setDataValue('password', val);
+        },
+        defaultValue: '',
+        validate: {
+          len: {
+            args: 7,
+            msg: "Password must be atleast 7 characters"
+          }
         }
       }
     }
