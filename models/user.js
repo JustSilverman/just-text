@@ -6,12 +6,34 @@ var rotary = require('../helpers/rotary');
 var CURRENT_VERSION = '001';
 var DEFAULT_SALT_FACTOR = 10;
 
+function getDefaultValues(definitions) {
+  return Object.keys(definitions).reduce(function(memo, currKey) {
+    var defaultValue = definitions[currKey].defaultValue;
+
+    if (defaultValue !== undefined) {
+      memo[currKey] = defaultValue;
+    }
+    return memo;
+  }, {});
+
+}
+
 module.exports = function(sequelize, DataTypes) {
   var userSchema = schemaFetcher.fetch('users', CURRENT_VERSION);
+  var definitions = userSchema.definition(DataTypes);
+  var defaultValues = getDefaultValues(definitions);
 
-  var User = sequelize.define(userSchema.name, userSchema.definition(DataTypes), {
+  var User = sequelize.define(userSchema.name, definitions, {
     tableName: userSchema.tableName,
     instanceMethods: {
+      setDefaults: function() {
+        Object.keys(defaultValues).forEach(function(key) {
+          if (!this[key] && (defaultValues[key] !== undefined)) {
+            this[key] = defaultValues[key];
+          }
+        }.bind(this));
+      },
+
       toJSON: function () {
         var values = this.get();
 
@@ -57,11 +79,14 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.addHook('beforeValidate', function(user) {
-    var phoneNumber = user.phoneNumber || '';
-    user.phoneNumber = rotary.parse(phoneNumber);
+    user.setDefaults();
   });
 
   User.addHook('beforeValidate', function(user) {
+    user.phoneNumber = rotary.parse(user.phoneNumber);
+  });
+
+  User.addHook('afterValidate', function(user) {
     if (user.passwordHash) {
       return sequelize.Promise.resolve();
     }

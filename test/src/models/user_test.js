@@ -74,6 +74,30 @@ describe('User', function() {
   });
 
   describe('validations', function() {
+    it('should require a non-blank first name', function() {
+      delete validParams.firstName;
+
+      return User
+        .create(validParams)
+        .then(assert.fail)
+        .catch(function(validationError) {
+          assert.strictEqual('firstName', validationError.errors[0].path);
+          assert.strictEqual('First name cannot be blank', validationError.errors[0].message);
+        });
+    });
+
+    it('should require a non-blank last name', function() {
+      delete validParams.lastName;
+
+      return User
+        .create(validParams)
+        .then(assert.fail)
+        .catch(function(validationError) {
+          assert.strictEqual('lastName', validationError.errors[0].path);
+          assert.strictEqual('Last name cannot be blank', validationError.errors[0].message);
+        });
+    });
+
     it('should require valid emails', function() {
       var params = assign(validParams, {
         email: 'a@b'
@@ -81,10 +105,11 @@ describe('User', function() {
 
       return User
         .create(params)
+        .then(assert.fail)
         .catch(function(validationError) {
           assert.strictEqual('email', validationError.errors[0].path);
           assert.strictEqual('Email address must be valid', validationError.errors[0].message);
-        })
+        });
     });
 
     it('should require phone numbers', function() {
@@ -92,10 +117,11 @@ describe('User', function() {
 
       return User
         .create(validParams)
+        .then(assert.fail)
         .catch(function(validationError) {
           assert.strictEqual('phoneNumber', validationError.errors[0].path);
           assert.strictEqual('Phone number must be 10 digits', validationError.errors[0].message);
-        })
+        });
     });
 
     it('should require phone numbers of at least 10 digits', function() {
@@ -105,10 +131,25 @@ describe('User', function() {
 
       return User
         .create(params)
+        .then(assert.fail)
         .catch(function(validationError) {
           assert.strictEqual('phoneNumber', validationError.errors[0].path);
           assert.strictEqual('Phone number must be 10 digits', validationError.errors[0].message);
-        })
+        });
+    });
+
+    it('should require passwords of 7 characters or greater', function() {
+      var params = assign(validParams, {
+        password: '123456'
+      });
+
+      return User
+        .create(params)
+        .then(assert.fail)
+        .catch(function(validationError) {
+          assert.strictEqual('password', validationError.errors[0].path);
+          assert.strictEqual('Password must be atleast 7 characters', validationError.errors[0].message);
+        });
     });
   });
 
