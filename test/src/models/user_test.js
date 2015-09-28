@@ -18,7 +18,7 @@ describe('User', function() {
       password: 'adsfadsf',
     }
 
-    User.truncate().then(function() {
+    User.truncate({ cascade: true }).then(function() {
       done();
     });
   });
