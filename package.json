@@ -13,6 +13,7 @@
     "errorhandler": "^1.4.2",
     "express": "^4.13.3",
     "express-handlebars": "^2.0.1",
+    "moment": "^2.10.6",
     "morgan": "^1.6.1",
     "object.assign": "^4.0.1",
     "pg": "^4.4.1",
