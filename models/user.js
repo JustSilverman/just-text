@@ -4,6 +4,7 @@ var bcrypt = require('bcrypt-as-promised');
 var schemaFetcher = require('../schemas/schema_fetcher');
 var rotary = require('../helpers/rotary');
 var CURRENT_VERSION = '001';
+var helper = require('../helpers/model');
 var DEFAULT_SALT_FACTOR = 10;
 
 function getDefaultValues(definitions) {
@@ -21,17 +22,16 @@ function getDefaultValues(definitions) {
 module.exports = function(sequelize, DataTypes) {
   var userSchema = schemaFetcher.fetch('users', CURRENT_VERSION);
   var definitions = userSchema.definition(DataTypes);
-  var defaultValues = getDefaultValues(definitions);
 
   var User = sequelize.define(userSchema.name, definitions, {
     tableName: userSchema.tableName,
     instanceMethods: {
+      getDefaultValues: function() {
+        return helper.getDefaultValues(definitions);
+      },
+
       setDefaults: function() {
-        Object.keys(defaultValues).forEach(function(key) {
-          if (!this[key] && (defaultValues[key] !== undefined)) {
-            this[key] = defaultValues[key];
-          }
-        }.bind(this));
+        helper.setDefaults(this, this.getDefaultValues());
       },
 
       toJSON: function () {
@@ -50,6 +50,9 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
+      associate: function(models) {
+        User.hasMany(models.PhoneNumberConfirmation, { foreignKey: 'userId' });
+      },
       authenticate: function(email, passwordAttempt) {
         return User.findOne({ email: email })
           .then(function(user) {

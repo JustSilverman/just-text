@@ -18,7 +18,7 @@ describe('users controller', function() {
   });
 
   afterEach(function(done) {
-    User.truncate().then(function() {
+    User.truncate({ cascade: true }).then(function() {
       done();
     });
   });
