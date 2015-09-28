@@ -50,6 +50,9 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
+      associate: function(models) {
+        User.hasMany(models.PhoneNumberConfirmation, { foreignKey: 'userId' });
+      },
       authenticate: function(email, passwordAttempt) {
         return User.findOne({ email: email })
           .then(function(user) {
